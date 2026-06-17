@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Config;
 
 use App\Enums\PostRiskLevel;
 
-class RiskAssessmentConfig
+class RiskAssessmentConfig extends ConfigService
 {
+    protected static string $configKey = 'post_risk';
+
     const string DEFAULT_RISK_SCORE = 'default_risk_score';
     const string SHORT_CONTENT_SCORE = 'short_content_score';
     const string KEYWORDS_SCORE = 'keywords_score';
@@ -16,8 +18,8 @@ class RiskAssessmentConfig
 
     public function getRiskScoreLevel(int $score): PostRiskLevel
     {
-        $highRiskThreshold = config('post_risk.' . self::HIGH_RISK_SCORE_THRESHOLD, 0);
-        $mediumRiskThreshold = config('post_risk.' . self::MEDIUM_RISK_SCORE_THRESHOLD, 0);
+        $highRiskThreshold = $this->getConfigValue(self::HIGH_RISK_SCORE_THRESHOLD, 0);
+        $mediumRiskThreshold = $this->getConfigValue(self::MEDIUM_RISK_SCORE_THRESHOLD, 0);
 
         if ($score >= $highRiskThreshold) {
             return PostRiskLevel::HIGH;
@@ -51,10 +53,5 @@ class RiskAssessmentConfig
     public function getKeywords(): array
     {
         return $this->getConfigValue(self::KEYWORDS, []);
-    }
-
-    private function getConfigValue(string $key, mixed $default): mixed
-    {
-        return config("post_risk.$key", $default);
     }
 }
