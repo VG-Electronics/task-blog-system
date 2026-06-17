@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\PostRiskLevel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -13,7 +14,11 @@ class Post extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['user_id', 'title', 'description', 'content'];
+    protected $fillable = ['user_id', 'title', 'description', 'content', 'risk_level', 'risk_score'];
+
+    protected $casts = [
+        'risk_level' => PostRiskLevel::class,
+    ];
 
     public function user(): BelongsTo
     {
