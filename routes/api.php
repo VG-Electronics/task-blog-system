@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/ping', fn() => response()->json(['status' => 'OK']));
 
 Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/login', [AuthController::class, 'login'])->name('login');
 
 Route::get('/posts', [PostController::class, 'index']);
 Route::get('/posts/{post}', [PostController::class, 'show']);
