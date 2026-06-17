@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Exceptions\PostArchivedException;
 use App\Jobs\CalculatePostRisk;
 use App\Models\Post;
 use Illuminate\Database\Eloquent\Collection;
@@ -10,12 +11,19 @@ class PostService
 {
     public function getAll(): Collection
     {
-        return Post::with('user:id,nickname')->withCount('comments')->get();
+        return Post::active()->with('user:id,nickname')->withCount(['comments' => fn($q) => $q->where('flag', false)])->get();
     }
 
     public function getById(Post $post): Post
     {
-        return $post->loadMissing(['user:id,nickname', 'comments.user:id,nickname']);
+        if ($post->isArchived()) {
+            throw new PostArchivedException();
+        }
+
+        return $post->load([
+            'user:id,nickname',
+            'comments' => fn($q) => $q->where('flag', false)->with('user:id,nickname'),
+        ]);
     }
 
     public function create(array $data): Post
@@ -29,6 +37,10 @@ class PostService
 
     public function update(Post $post, array $data): Post
     {
+        if ($post->isArchived()) {
+            throw new PostArchivedException();
+        }
+
         $post->update(array_merge($data, [
             // Clear previous score
             'risk_score' => null,

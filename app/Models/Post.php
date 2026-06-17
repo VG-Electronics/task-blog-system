@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\PostRiskLevel;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -19,6 +20,16 @@ class Post extends Model
     protected $casts = [
         'risk_level' => PostRiskLevel::class,
     ];
+
+    public function isArchived(): bool
+    {
+        return $this->archived_at !== null;
+    }
+
+    public function scopeActive(Builder $query): void
+    {
+        $query->whereNull('archived_at');
+    }
 
     public function user(): BelongsTo
     {

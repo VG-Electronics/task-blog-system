@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Exceptions\CommentFlaggedException;
 use App\Models\Comment;
 use App\Models\Post;
 use Illuminate\Database\Eloquent\Collection;
@@ -10,11 +11,15 @@ class CommentService
 {
     public function getAll(Post $post): Collection
     {
-        return $post->comments()->with('user:id,nickname')->get();
+        return $post->comments()->where('flag', false)->with('user:id,nickname')->get();
     }
 
     public function getById(Comment $comment): Comment
     {
+        if ($comment->flag) {
+            throw new CommentFlaggedException();
+        }
+
         return $comment->loadMissing('user:id,nickname');
     }
 
