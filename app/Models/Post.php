@@ -14,7 +14,7 @@ class Post extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['user_id', 'title', 'description', 'content', 'risk_level', 'risk_score'];
+    protected $fillable = ['user_id', 'title', 'description', 'content', 'risk_level', 'risk_score', 'archived_at'];
 
     protected $casts = [
         'risk_level' => PostRiskLevel::class,
