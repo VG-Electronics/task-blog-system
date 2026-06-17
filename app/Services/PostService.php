@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Jobs\CalculatePostRisk;
 use App\Models\Post;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -19,12 +20,22 @@ class PostService
 
     public function create(array $data): Post
     {
-        return Post::create($data);
+        $post = Post::create($data);
+
+        CalculatePostRisk::dispatch($post);
+
+        return $post;
     }
 
     public function update(Post $post, array $data): Post
     {
-        $post->update($data);
+        $post->update(array_merge($data, [
+            // Clear previous score
+            'risk_score' => null,
+            'risk_level' => null,
+        ]));
+
+        CalculatePostRisk::dispatch($post);
 
         return $post;
     }
