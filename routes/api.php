@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ReportingController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CommentController;
 use App\Http\Controllers\Api\PostController;
@@ -13,6 +14,12 @@ Route::get('/posts', [PostController::class, 'index']);
 Route::get('/posts/{post}', [PostController::class, 'show']);
 Route::get('/posts/{post}/comments', [CommentController::class, 'index']);
 Route::get('/posts/{post}/comments/{comment}', [CommentController::class, 'show']);
+
+Route::middleware(['auth:sanctum', 'admin'])->prefix('admin/reporting')->group(function () {
+    Route::get('/posts', [ReportingController::class, 'posts']);
+    Route::get('/comments', [ReportingController::class, 'comments']);
+    Route::get('/analytics', [ReportingController::class, 'analytics']);
+});
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);

@@ -26,7 +26,10 @@ class PostController extends ApiController
     {
         $this->authorize('create', Post::class);
 
-        return response()->json($this->postService->create($request->validated()), 201);
+        return response()->json(
+            $this->postService->create([...$request->validated(), 'user_id' => $request->user()->id]),
+            201,
+        );
     }
 
     public function update(PostRequest $request, Post $post): JsonResponse
