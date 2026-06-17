@@ -10,12 +10,12 @@ class PostService
 {
     public function getAll(): Collection
     {
-        return Post::all();
+        return Post::with('user:id,nickname')->withCount('comments')->get();
     }
 
     public function getById(Post $post): Post
     {
-        return $post;
+        return $post->loadMissing(['user:id,nickname', 'comments.user:id,nickname']);
     }
 
     public function create(array $data): Post

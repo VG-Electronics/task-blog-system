@@ -10,12 +10,12 @@ class CommentService
 {
     public function getAll(Post $post): Collection
     {
-        return $post->comments;
+        return $post->comments()->with('user:id,nickname')->get();
     }
 
     public function getById(Comment $comment): Comment
     {
-        return $comment;
+        return $comment->loadMissing('user:id,nickname');
     }
 
     public function create(Post $post, array $data): Comment
