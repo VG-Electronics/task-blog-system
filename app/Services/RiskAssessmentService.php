@@ -37,8 +37,10 @@ class RiskAssessmentService
         $keywords = array_map(fn($e) => strtolower($e), $this->config->getKeywords());
 
         foreach ([$post->title, $post->description, $post->content] as $field) {
-            if (in_array(strtolower($field), $keywords)) {
-                return true;
+            foreach ($keywords as $keyword) {
+                if (str_contains(strtolower($field), $keyword)) {
+                    return true;
+                }
             }
         }
 

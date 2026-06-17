@@ -11,7 +11,7 @@ class Comment extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['user_id', 'post_id', 'content'];
+    protected $fillable = ['user_id', 'post_id', 'content', 'flag'];
 
     public function user(): BelongsTo
     {

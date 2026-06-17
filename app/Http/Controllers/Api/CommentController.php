@@ -27,7 +27,10 @@ class CommentController extends ApiController
     {
         $this->authorize('create', Comment::class);
 
-        return response()->json($this->commentService->create($post, $request->validated()), 201);
+        return response()->json(
+            $this->commentService->create($post, [...$request->validated(), 'user_id' => $request->user()->id]),
+            201,
+        );
     }
 
     public function update(CommentRequest $request, Post $post, Comment $comment): JsonResponse
