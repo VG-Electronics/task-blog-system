@@ -4,7 +4,6 @@ namespace App\Jobs;
 
 use App\Enums\PostRiskLevel;
 use App\Models\Post;
-use App\Services\RiskAssessmentConfig;
 use App\Services\RiskAssessmentService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
