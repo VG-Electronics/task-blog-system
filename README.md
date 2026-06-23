@@ -2,6 +2,10 @@
 
 A RESTful blog API built with **Laravel 13**, featuring role-based access control, automated risk assessment for posts, content archiving, background job processing, and admin reporting with export capabilities.
 
+Claude Code was used to speed up the development - I was guiding it and reviewing the changes step by step. I made every architecture decision and I wrote big part of the code manually.
+
+This task took me around 6 hours to complete.
+
 ---
 
 ## Table of Contents
